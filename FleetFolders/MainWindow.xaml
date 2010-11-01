@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window
+	x:Class="FleetFolders.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Name="MainWindowWindow"
+	Title="FleetFolders"
+	Height="300"
+	MinHeight="300"
+	MinWidth="100"
+	Width="345"
+	KeyDown="KeyDownEventHandler"
+	SizeChanged="Window_SizeChanged">
+	<DockPanel>
+		<Grid
+			DockPanel.Dock="Top"
+			Name="GridMain">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition
+					Width="*">
+				</ColumnDefinition>
+				<ColumnDefinition
+					MinWidth="200"
+					Width="*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition
+					Height="30" />
+				<RowDefinition
+					Height="*" />
+			</Grid.RowDefinitions>
+			<Label
+				Grid.Row="0"
+				Grid.Column="0">Filter</Label>
+			<TextBox
+				Name="FilterText"
+				Grid.Row="0"
+				Grid.Column="1"
+				Text="FolderURL"></TextBox>
+			<ListView
+				Name="FoldersList"
+				Grid.Column="0"
+				Grid.Row="1"
+				Grid.ColumnSpan="2"
+				MouseDoubleClick="FoldersList_MouseDoubleClick">
+				<ListView.View>
+					<GridView>
+						<GridViewColumn
+							x:Name="KeyColumn"
+							Header="Key"
+							DisplayMemberBinding="{Binding AccessKey}" />
+						<GridViewColumn
+							x:Name="FolderColumn"
+							Header="Folder"
+							DisplayMemberBinding="{Binding Url, Mode=TwoWay}" />
+						<GridViewColumn
+							x:Name="CountColumn"
+							Header="Count"
+							DisplayMemberBinding="{Binding UsageCount, Mode=TwoWay}" />
+						<GridViewColumn
+							x:Name="LastAccessedColumn"
+							Header="Last Accessed"
+							DisplayMemberBinding="{Binding LastAccessed, Mode=TwoWay }" />
+					</GridView>
+				</ListView.View>
+			</ListView>
+		</Grid>
+	</DockPanel>
+</Window>
