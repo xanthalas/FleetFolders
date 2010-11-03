@@ -8,31 +8,55 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace FleetFolders
 {
 
 	/// <summary>
-	/// Description of FleetFoldersIO.
+	/// Handles reading and writing of folder list to a file. Manages the collection of folders.
 	/// </summary>
 	public class FleetFoldersIO
 	{
+		/// <summary>
+		/// Collection of all the folders which the user can open
+		/// </summary>
 		public System.Collections.ObjectModel.ObservableCollection<FleetFolder> Folders;
+
+		/// <summary>
+		/// Filtered collection holding only those folders whose name matches the current filter
+		/// </summary>
+		public System.Collections.ObjectModel.ObservableCollection<FleetFolder> FilteredFolders;
 	
+		/// <summary>
+		/// Create a new FleetFoldersIO object and initialise it from the file whose path is passed in.
+		/// </summary>
+		/// <param name="foldersFile">Full path to the file containing the folders</param>
 		public FleetFoldersIO(string foldersFile)
 		{
 			if (File.Exists(foldersFile))
 			{
 				LoadFolders(foldersFile);
+				
+				UpdateFilteredFolders(string.Empty);
 			}
 		}
 		
+		/// <summary>
+		/// Loads the folders from the file.
+		/// </summary>
+		/// <param name="foldersFile">Full path to the file containing the folders</param>
 		public void LoadFolders(string foldersFile)
 		{
 			if (Folders == null)
 			{
 				Folders = new ObservableCollection<FleetFolder>();
+			}
+
+			if (FilteredFolders == null)
+			{
+				FilteredFolders = new ObservableCollection<FleetFolder>();
 			}
 			
 			if (!File.Exists(foldersFile))
@@ -58,6 +82,10 @@ namespace FleetFolders
             }
 		}
 		
+		/// <summary>
+		/// Saves the current collection of folders back to the file.
+		/// </summary>
+		/// <param name="foldersFile">Full path of the file to write the folders to</param>
 		public void SaveFolders(string foldersFile)
 		{
 			string backupFilename = foldersFile + "~";
@@ -84,11 +112,34 @@ namespace FleetFolders
 		    }
 		}
 		
+		/// <summary>
+		/// Updates the filtered collection based on the filter passed in.
+		/// </summary>
+		/// <param name="filter">Filter (simple text string) to apply to the URL of each folder</param>
+		public void UpdateFilteredFolders(string filter)
+		{
+			filter = filter.ToUpper();
+			
+			FilteredFolders.Clear();
+			
+			var filtered = from f in Folders where f.Url.ToUpper().Contains(filter) select f;
+				
+			foreach (FleetFolder f in filtered)
+			{
+				FilteredFolders.Add(f);
+			}
+		}
+		
+		/// <summary>
+		/// Searches the filtered collection of folders for the key passed in and returns the folder if found.
+		/// </summary>
+		/// <param name="key">The key (A-Z) to search for</param>
+		/// <returns>The folder if a match is found, otherwise null.</returns>
 		public FleetFolder GetFolderByAccessKey(string key)
 		{
-			foreach(FleetFolder folder in Folders)
+			foreach(FleetFolder folder in FilteredFolders)
 			{
-				if (folder.AccessKey == key)
+				if (folder.AccessKey.ToUpper() == key)
 				{
 					return folder;
 				}

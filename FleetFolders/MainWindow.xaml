@@ -7,7 +7,7 @@
 	MinHeight="300"
 	MinWidth="100"
 	Width="345"
-	KeyDown="KeyDownEventHandler"
+	KeyUp="MainWindowWindow_KeyUp"
 	SizeChanged="Window_SizeChanged">
 	<DockPanel>
 		<Grid
@@ -15,8 +15,7 @@
 			Name="GridMain">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition
-					Width="*">
-				</ColumnDefinition>
+					Width="*"></ColumnDefinition>
 				<ColumnDefinition
 					MinWidth="200"
 					Width="*"></ColumnDefinition>
@@ -27,14 +26,18 @@
 				<RowDefinition
 					Height="*" />
 			</Grid.RowDefinitions>
-			<Label
+			<StackPanel
+				Orientation="Horizontal"
 				Grid.Row="0"
-				Grid.Column="0">Filter</Label>
-			<TextBox
-				Name="FilterText"
-				Grid.Row="0"
-				Grid.Column="1"
-				Text="FolderURL"></TextBox>
+				Grid.Column="0"
+				Grid.ColumnSpan="2">
+				<Label>Filter (shift to type):</Label>
+				<TextBox
+					Name="FilterText"
+					Focusable="False"
+					Text=""
+					TextChanged="FilterText_TextChanged"></TextBox>
+			</StackPanel>
 			<ListView
 				Name="FoldersList"
 				Grid.Column="0"

@@ -10,7 +10,7 @@ using System.ComponentModel;
 namespace FleetFolders
 {
 	/// <summary>
-	/// FleetFolder holds a single folder
+	/// FleetFolder holds a single folder.
 	/// </summary>
 	public class FleetFolder : INotifyPropertyChanged, IComparable
 	{
@@ -18,17 +18,17 @@ namespace FleetFolders
 		private DateTime _lastAccessed;
 		
 		/// <summary>
-		/// The keyboard key used to select this folder
+		/// Gets/Sets the keyboard key used to select this folder.
 		/// </summary>
 		public string AccessKey {get; set;}
 		
 		/// <summary>
-		/// The URL of the folder
+		/// Gets/Sets the URL of the folder.
 		/// </summary>
 		public string Url {get; set;}
 		
 		/// <summary>
-		/// Number of times this folder has been selected
+		/// Gets/Sets the number of times this folder has been selected.
 		/// </summary>
 		public int UsageCount {
 			get
@@ -46,7 +46,7 @@ namespace FleetFolders
 		}
 		
 		/// <summary>
-		/// The last time this folder was accessed
+		/// Gets/Sets the last time this folder was accessed.
 		/// </summary>
 		public DateTime LastAccessed {
 			get
@@ -63,6 +63,13 @@ namespace FleetFolders
 			}
 		}
 		
+		/// <summary>
+		/// Construct a new FleetFolder object.
+		/// </summary>
+		/// <param name="accessKey">Keybord key (A-Z) used to access this folder</param>
+		/// <param name="url">Full URL of the folder</param>
+		/// <param name="usageCount">Number of times this folder has been opened</param>
+		/// <param name="lastAccessed">Date and time this folder was last opened</param>
 		public FleetFolder(string accessKey, string url, int usageCount, DateTime lastAccessed)
 		{
 			AccessKey = accessKey;
@@ -71,20 +78,17 @@ namespace FleetFolders
 			LastAccessed = lastAccessed;
 		}
 		
-		public string LastAccessedInDisplayFormat
-		{
-			get
-			{
-				return LastAccessed.Day.ToString() + "/" + LastAccessed.Month.ToString() + "/" + LastAccessed.Year.ToString() +
-					" " + LastAccessed.Hour.ToString() + ":" + LastAccessed.Minute.ToString() + ":" + LastAccessed.Second.ToString();
-			}
-		}
-		
         #region INotifyPropertyChanged Members
 
+        /// <summary>
+        /// Event to raise when a property changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // Notify interested parties when property changes
+        /// <summary>
+        /// Notify interested parties when property changes
+        /// </summary>
+        /// <param name="changed">The object which has changed</param>
         protected void NotifyPropertyChanged(object changed)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
