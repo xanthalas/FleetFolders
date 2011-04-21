@@ -20,6 +20,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -151,15 +152,12 @@ namespace FleetFolders
 		/// <returns>The folder if a match is found, otherwise null.</returns>
 		public FleetFolder GetFolderByAccessKey(string key)
 		{
-			foreach(FleetFolder folder in FilteredFolders)
-			{
-				if (folder.AccessKey.ToUpper() == key)
-				{
-					return folder;
-				}
-			}
+			FleetFolder firstMatch = FilteredFolders
+				.Where(f => f.AccessKey.ToUpper() == key)
+				.Select (f => f) 
+				.SingleOrDefault();
 			
-			return null;
+			return firstMatch;
 		}
 	}
 }

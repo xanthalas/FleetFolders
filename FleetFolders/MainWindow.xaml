@@ -8,7 +8,10 @@
 	MinWidth="100"
 	Width="345"
 	KeyUp="MainWindowWindow_KeyUp"
-	SizeChanged="Window_SizeChanged">
+	SizeChanged="Window_SizeChanged"
+    Closing="MainWindowWindow_Closing"
+    StateChanged="MainWindowWindow_StateChanged"
+    IsVisibleChanged="MainWindowWindow_IsVisibleChanged" Icon="file:///C:/code/FleetFolders/FleetFolders/FOLDER.ICO">
 	<DockPanel>
 		<Grid
 			DockPanel.Dock="Top"

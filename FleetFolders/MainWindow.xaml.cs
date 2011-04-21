@@ -20,16 +20,11 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace FleetFolders
 {
@@ -50,6 +45,21 @@ namespace FleetFolders
 		/// </summary>
 		private bool _minimizeOnSelection = true;
 
+        /// <summary>
+        /// Holds the icon which will appear in the System Tray
+        /// </summary>
+        private System.Windows.Forms.NotifyIcon systemTrayIcon;
+
+        /// <summary>
+        /// Holds the current window state
+        /// </summary>
+        private WindowState storedWindowState = WindowState.Normal;
+
+        /// <summary>
+        /// Ensures we only show the tooltip during minimising on the first time through
+        /// </summary>
+	    private bool isMinimizeTooltipAlreadyShown = false;
+
 		/// <summary>
 		/// Main constructor for this class.
 		/// </summary>
@@ -62,7 +72,14 @@ namespace FleetFolders
 			FoldersList.ItemsSource = io.FilteredFolders;
 			
 			FilterText.BorderBrush = FilterText.Background;
-		}
+
+            systemTrayIcon = new System.Windows.Forms.NotifyIcon();
+            systemTrayIcon.BalloonTipText = "FleetFolders has been minimised. Click the tray icon to open.";
+            systemTrayIcon.BalloonTipTitle = "FleetFolders";
+            systemTrayIcon.Text = "FleetFolders";
+            systemTrayIcon.Icon = new System.Drawing.Icon("Folder.ico");
+            systemTrayIcon.Click += new EventHandler(m_notifyIcon_Click);
+        }
 		
 		
 		/// <summary>
@@ -71,25 +88,30 @@ namespace FleetFolders
 		/// <param name="folder">Full path to the folder to be opened</param>
 		private void openFolder(FleetFolder folder)
 		{
-			try {
-				ProcessStartInfo psi = new ProcessStartInfo("explorer.exe");
-				psi.Arguments += folder.Url;
-				psi.UseShellExecute = false;
-				Process.Start(psi);
-				folder.LastAccessed = DateTime.Now;
-				folder.UsageCount++;
-				
-				io.SaveFolders(STORAGEFILE);
-				
-				if (_minimizeOnSelection)
-				{
-					this.WindowState = WindowState.Minimized;
-				}
-			} 
-			catch (Exception e) 
-			{
-				MessageBox.Show("FleetFolders Error", "Cannot start explorer: " + e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
-			}
+            if (Directory.Exists(folder.Url))
+            {
+                try
+                {
+                    ProcessStartInfo psi = new ProcessStartInfo("explorer.exe");
+                    psi.Arguments += folder.Url;
+                    psi.UseShellExecute = false;
+                    Process.Start(psi);
+                    folder.LastAccessed = DateTime.Now;
+                    folder.UsageCount++;
+
+                    io.SaveFolders(STORAGEFILE);
+
+                    if (_minimizeOnSelection)
+                    {
+                        this.WindowState = WindowState.Minimized;
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("FleetFolders Error", "Cannot start explorer: " + e.Message, MessageBoxButton.OK,
+                                    MessageBoxImage.Error);
+                }
+            }
 		}
 		
 		
@@ -222,7 +244,67 @@ namespace FleetFolders
 				}
 			}
 		}
-		
-		#endregion
-	}
+
+
+        /// <summary>
+        /// Fires when the user clicks the icon in the system tray. Shows the main window.
+        /// </summary>
+        /// <param name="sender">Standard sender object</param>
+        /// <param name="e">Standard event args</param>
+        void m_notifyIcon_Click(object sender, EventArgs e)
+        {
+            Show();
+            WindowState = storedWindowState;
+        }
+
+        /// <summary>
+        /// Fires when the main window is closing. Disposes of the icon object.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainWindowWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            systemTrayIcon.Dispose();
+            systemTrayIcon = null;
+        }
+
+        /// <summary>
+        /// When the window state changes sets it up according to it's new state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainWindowWindow_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide();
+                if (systemTrayIcon != null && !isMinimizeTooltipAlreadyShown)
+                    systemTrayIcon.ShowBalloonTip(2000);
+                isMinimizeTooltipAlreadyShown = true;
+
+            }
+            else
+            {
+                storedWindowState = WindowState;
+            }
+        }
+
+        private void MainWindowWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            CheckTrayIcon();
+        }
+
+        void CheckTrayIcon()
+        {
+            ShowTrayIcon(!IsVisible);
+        }
+
+        void ShowTrayIcon(bool show)
+        {
+            if (systemTrayIcon != null)
+                systemTrayIcon.Visible = show;
+        }
+
+        #endregion
+    }
 }
