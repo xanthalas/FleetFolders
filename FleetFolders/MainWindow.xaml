@@ -74,7 +74,7 @@
 						<GridViewColumn
 							x:Name="LastAccessedColumn"
 							Header="Last Accessed"
-							DisplayMemberBinding="{Binding LastAccessed, Mode=TwoWay }" />
+							DisplayMemberBinding="{Binding LastAccessed, Mode=TwoWay, StringFormat={}{0:dd MMM yyyy  HH:mm }}" />
 					</GridView>
 				</ListView.View>
 			</ListView>

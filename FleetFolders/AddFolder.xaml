@@ -20,9 +20,9 @@
         </StackPanel>
         
         <Button Name="browseForFolder" Grid.Row="0" Grid.Column="2" Margin="4" Click="browseForFolder_Click">...</Button>
-        <Button Name="okButton" Grid.Row="1" Grid.Column="1" Margin="4" IsCancel="False" Click="okButton_Click" IsEnabled="False">Ok</Button>
+        <Button Name="okButton" Grid.Row="1" Grid.Column="1" Margin="4" IsCancel="False" Click="okButton_Click" IsEnabled="False" IsDefault="True">Ok</Button>
         <Button Name="cancelButton" Grid.Row="1" Grid.Column="2" Margin="2,4" IsCancel="True" Click="cancelButton_Click">Cancel</Button>
         
-        <TextBox Name="errorMessage" Grid.Row="1" Grid.Column="0" Foreground="Red" />
+        <Label Name="errorMessage" Grid.Row="1" Grid.Column="0" Foreground="Red" />
     </Grid>
 </Window>

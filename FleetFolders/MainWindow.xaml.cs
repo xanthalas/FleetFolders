@@ -332,7 +332,7 @@ namespace FleetFolders
                 return;
             }
 
-            var result = MessageBox.Show("Delete folder " + folder.Url + "?", "FleetFolders delete", MessageBoxButton.YesNo);
+            var result = MessageBox.Show("Remove folder " + folder.Url + " from the list?", "FleetFolders remove", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {

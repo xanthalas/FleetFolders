@@ -56,14 +56,14 @@ namespace FleetFolders
 
             if (containsInvalidCharacter.IsMatch(path))
             {
-                errorMessage.Text = "Path contains invalid characters";
+                errorMessage.Content = "Path contains invalid characters";
                 errorMessage.Foreground = System.Windows.Media.Brushes.Red;
                 errorMessage.Visibility = Visibility.Visible;
                 return false;
             }
             else
             {
-                errorMessage.Text = string.Empty;
+                errorMessage.Content = string.Empty;
                 errorMessage.Visibility = Visibility.Hidden;
                 return true;
             }
@@ -80,13 +80,13 @@ namespace FleetFolders
         {
             if (Directory.Exists(path))
             {
-                errorMessage.Text = string.Empty;
+                errorMessage.Content = string.Empty;
                 errorMessage.Visibility = Visibility.Hidden;
                 return true;
             }
             else
             {
-                errorMessage.Text = "Warning: path doesn't exist";
+                errorMessage.Content = "Warning: path doesn't exist";
                 errorMessage.Foreground = System.Windows.Media.Brushes.DarkOrange;
                 errorMessage.Visibility = Visibility.Visible;
                 return false;
@@ -100,7 +100,7 @@ namespace FleetFolders
         /// <param name="e">Arguments associated with this event</param>
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
-            if (folderPath.Text.Length > 3 && isPathValid(folderPath.Text))
+            if (folderPath.Text.Length > 2 && isPathValid(folderPath.Text))
             {
                 Path = folderPath.Text;
                 this.DialogResult = true;
