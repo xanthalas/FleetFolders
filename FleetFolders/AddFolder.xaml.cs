@@ -19,9 +19,11 @@
  *  along with FleetFolders.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.IO;
+using System.Windows.Forms;
 
 namespace FleetFolders
 {
@@ -124,14 +126,40 @@ namespace FleetFolders
         /// <param name="e">Arguments associated with this event</param>
         private void folderPath_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (okButton != null)
+            if (folderPath.Text.Length == 0)
             {
-                bool validPath = isPathValid(folderPath.Text);
-                okButton.IsEnabled = validPath;
-
-                if (validPath)
+                okButton.IsEnabled = false;
+            }
+            else
+            {
+                if (okButton != null)
                 {
-                    seeIfPathExists(folderPath.Text);
+                    bool validPath = isPathValid(folderPath.Text);
+                    okButton.IsEnabled = validPath;
+
+                    if (validPath)
+                    {
+                        seeIfPathExists(folderPath.Text);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Event handler for the browse folders button
+        /// </summary>
+        /// <param name="sender">Standard sender</param>
+        /// <param name="e">Arguments associated with this event</param>
+        private void browseForFolder_Click(object sender, RoutedEventArgs e)
+        {
+            using (var folderDialog = new FolderBrowserDialog())
+            {
+
+                var result = folderDialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    folderPath.Text = folderDialog.SelectedPath;
                 }
             }
         }

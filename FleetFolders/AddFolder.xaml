@@ -16,11 +16,11 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <Label>Path:</Label>
-            <TextBox Name="folderPath" Width="200" TextChanged="folderPath_TextChanged">sadasdasda</TextBox>
+            <TextBox Name="folderPath" Width="200" TextChanged="folderPath_TextChanged"></TextBox>
         </StackPanel>
         
-        <Button Name="browseForFolder" Grid.Row="0" Grid.Column="2" Margin="4">...</Button>
-        <Button Name="okButton" Grid.Row="1" Grid.Column="1" Margin="4" IsCancel="False" Click="okButton_Click">Ok</Button>
+        <Button Name="browseForFolder" Grid.Row="0" Grid.Column="2" Margin="4" Click="browseForFolder_Click">...</Button>
+        <Button Name="okButton" Grid.Row="1" Grid.Column="1" Margin="4" IsCancel="False" Click="okButton_Click" IsEnabled="False">Ok</Button>
         <Button Name="cancelButton" Grid.Row="1" Grid.Column="2" Margin="2,4" IsCancel="True" Click="cancelButton_Click">Cancel</Button>
         
         <TextBox Name="errorMessage" Grid.Row="1" Grid.Column="0" Foreground="Red" />
