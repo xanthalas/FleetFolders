@@ -142,12 +142,13 @@ namespace FleetFolders
 		/// <param name="filter">Filter (simple text string) to apply to the URL of each folder</param>
 		public void UpdateFilteredFolders(string filter)
 		{
+            
 			filter = filter.ToUpper();
 		    currentFilter = filter;
 
 			FilteredFolders.Clear();
 			
-			var filtered = from f in Folders where f.Url.ToUpper().Contains(filter) select f;
+			var filtered = from f in Folders where f.Url.ToUpper().Contains(filter) orderby f.AccessKey select f;
 				
 			foreach (FleetFolder f in filtered)
 			{
