@@ -5,17 +5,17 @@ FleetFolders is a small Windows utility which displays a list of folders and all
 
 I wrote it because I spend a lot of time opening and closing Explorer windows every day. I don't like to have lots of windows open so when I am finished with a folder window I close it. Later when I need it again I have to use the Run dialog to find and open the desired folder again. Although Windows will remember previously opened folders and pre-fill the Run box it is still a cumbersome process. FleetFolders makes it ridiculously easy.
 
-FleetFolders is written in C# using WPF and is compiled against .Net framework 4. It has been written using the latest Beta version of SharpDevelop 4.
+FleetFolders is written in C# using WPF and is compiled against .Net framework 4. 
 
 To hack on it you will need the following:
 
    .Net framework 4
-   SharpDevelop 4 (currently in Beta) available here: http://www.icsharpcode.net/OpenSource/SD/Download
+   Visual Studio 2010
 
 The file containing the data is in JSON format and uses the excellent Json.Net library by James Newton-King. A copy of the DLL is already included in the SharedBinaries folder of the project or is available from James' web site here: http://james.newtonking.com/pages/json-net.aspx.
 
-It is licensed under the GPL v3 and is Copyright (c) 2010 xanthalas.co.uk.
+It is licensed under the GPL v3 and is Copyright (c) 2012 xanthalas.co.uk.
 
-Xanthalas, November 2010.   xanthalas@live.co.uk
+Xanthalas, January 2012.   xanthalas@live.co.uk
 
 
