@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2010 xanthalas.co.uk
+﻿/* Copyright (c) 2012 xanthalas.co.uk
  * 
  * Author: Xanthalas
  * Date  : October 2010
@@ -277,10 +277,11 @@ namespace FleetFolders
         {
             if (WindowState == WindowState.Minimized)
             {
-                Hide();
-                if (systemTrayIcon != null && !isMinimizeTooltipAlreadyShown)
-                    systemTrayIcon.ShowBalloonTip(2000);
-                isMinimizeTooltipAlreadyShown = true;
+                //Hide();   --Re-enable this for System Tray functionality
+                //
+                //if (systemTrayIcon != null && !isMinimizeTooltipAlreadyShown)
+                //    systemTrayIcon.ShowBalloonTip(2000);
+                //isMinimizeTooltipAlreadyShown = true;
 
             }
             else
@@ -294,11 +295,16 @@ namespace FleetFolders
             CheckTrayIcon();
         }
 
+
         void CheckTrayIcon()
         {
-            ShowTrayIcon(!IsVisible);
+            //ShowTrayIcon(!IsVisible);
         }
 
+        /// <summary>
+        /// Show (or hide) the tray icon
+        /// </summary>
+        /// <param name="show"></param>
         void ShowTrayIcon(bool show)
         {
             if (systemTrayIcon != null)
@@ -306,5 +312,61 @@ namespace FleetFolders
         }
 
         #endregion
+
+        /// <summary>
+        /// Event handler for the Delete entry button click event
+        /// </summary>
+        /// <param name="sender">Standard sender</param>
+        /// <param name="e">Arguments associated with this event</param>
+        private void deleteEntry_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (FoldersList.SelectedItem == null)
+            {
+                return;
+            }
+
+            var folder = FoldersList.SelectedItem as FleetFolder;
+            if (folder == null)
+            {
+                return;
+            }
+
+            var result = MessageBox.Show("Delete folder " + folder.Url + "?", "FleetFolders delete", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                io.RemoveFolder(folder);
+            }
+        }
+
+        /// <summary>
+        /// Event handler for the selection changed event
+        /// </summary>
+        /// <param name="sender">Standard sender</param>
+        /// <param name="e">Arguments associated with this event</param>
+        private void FoldersList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            deleteEntry.IsEnabled = !(FoldersList.SelectedItem == null);
+        }
+
+        /// <summary>
+        /// Event handler for the Add entry button click event
+        /// </summary>
+        /// <param name="sender">Standard sender</param>
+        /// <param name="e">Arguments associated with this event</param>
+        private void addEntry_Click(object sender, RoutedEventArgs e)
+        {
+            AddFolder addFolder = new AddFolder();
+
+            bool? result = addFolder.ShowDialog();
+            io.GetNextFreeAccessKey();
+            if (result.HasValue && result.Value)
+            {
+                string newAccessKey = io.GetNextFreeAccessKey();
+                FleetFolder newFolder = new FleetFolder(newAccessKey, addFolder.Path, 0, DateTime.Now);
+                io.AddFolder(newFolder);
+            }
+        }
     }
 }

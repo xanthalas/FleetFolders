@@ -13,7 +13,16 @@
     StateChanged="MainWindowWindow_StateChanged"
     IsVisibleChanged="MainWindowWindow_IsVisibleChanged" Icon="file:///C:/code/FleetFolders/FleetFolders/FOLDER.ICO">
 	<DockPanel>
-		<Grid
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <Button Name="deleteEntry" Foreground="Red" FontSize="16" FontWeight="Bold"  Grid.Column="0" Click="deleteEntry_Click" IsEnabled="False">X</Button>
+            <Button Name="addEntry" Foreground="Green" FontSize="18" FontWeight="Bold" Grid.Column="1" Click="addEntry_Click">+</Button>
+        </Grid>		
+        <Grid
 			DockPanel.Dock="Top"
 			Name="GridMain">
 			<Grid.ColumnDefinitions>
@@ -46,7 +55,8 @@
 				Grid.Column="0"
 				Grid.Row="1"
 				Grid.ColumnSpan="2"
-				MouseDoubleClick="FoldersList_MouseDoubleClick">
+				MouseDoubleClick="FoldersList_MouseDoubleClick"
+                SelectionChanged="FoldersList_SelectionChanged">
 				<ListView.View>
 					<GridView>
 						<GridViewColumn
@@ -69,5 +79,6 @@
 				</ListView.View>
 			</ListView>
 		</Grid>
+
 	</DockPanel>
 </Window>

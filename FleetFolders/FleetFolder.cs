@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2010 xanthalas.co.uk
+﻿/* Copyright (c) 2012 xanthalas.co.uk
  * 
  * Author: Xanthalas
  * Date  : October 2010

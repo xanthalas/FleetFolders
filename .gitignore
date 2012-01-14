@@ -1,2 +1,7 @@
 bin/
 obj/
+_ReSharper.FleetFolders/
+*ReSharper*
+*.docstates*
+*typemock*
+*.suo

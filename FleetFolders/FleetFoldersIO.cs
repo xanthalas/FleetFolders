@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2010 xanthalas.co.uk
+﻿/* Copyright (c) 2012 xanthalas.co.uk
  * 
  * Author: Xanthalas
  * Date  : October 2010
@@ -20,11 +20,9 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace FleetFolders
 {
@@ -34,6 +32,17 @@ namespace FleetFolders
 	/// </summary>
 	public class FleetFoldersIO
 	{
+
+        /// <summary>
+        /// All the available keys - one for each letter of the alphabet
+        /// </summary>
+	    private const string ALL_KEYS = "abcdefghijklmnopqrstuvwxyz";
+
+        /// <summary>
+        /// Holds the value of the filter currently being used
+        /// </summary>
+	    private string currentFilter = string.Empty;
+
 		/// <summary>
 		/// Collection of all the folders which the user can open
 		/// </summary>
@@ -134,7 +143,8 @@ namespace FleetFolders
 		public void UpdateFilteredFolders(string filter)
 		{
 			filter = filter.ToUpper();
-			
+		    currentFilter = filter;
+
 			FilteredFolders.Clear();
 			
 			var filtered = from f in Folders where f.Url.ToUpper().Contains(filter) select f;
@@ -159,5 +169,47 @@ namespace FleetFolders
 			
 			return firstMatch;
 		}
+
+        /// <summary>
+        /// Add a new folder to the collection
+        /// </summary>
+        /// <param name="folder">The folder to add</param>
+        public void AddFolder(FleetFolder folder)
+        {
+            if (!Folders.Contains(folder))
+            {
+                Folders.Add(folder);
+
+                UpdateFilteredFolders(currentFilter);
+            }
+        }
+
+        /// <summary>
+        /// Removes the chosen folder from the collection
+        /// </summary>
+        /// <param name="folder">The folder to remove</param>
+        public void RemoveFolder(FleetFolder folder)
+        {
+            if (Folders.Contains(folder))
+            {
+                Folders.Remove(folder);
+
+                UpdateFilteredFolders(currentFilter);
+            }
+        }
+
+        /// <summary>
+        /// Returns the next free access key
+        /// </summary>
+        /// <returns>The single character access key or empty if there are no more free</returns>
+        public string GetNextFreeAccessKey()
+        {
+            var keysInUse = Folders.Select(folder => folder.AccessKey).Aggregate((current, next) => current + next);
+
+            var allFreeKeys = from key in ALL_KEYS where keysInUse.IndexOf(key) < 0 select key;
+
+            return allFreeKeys.FirstOrDefault().ToString();
+
+        }
 	}
 }
